@@ -28,7 +28,7 @@ even support the `template` or `style` tags.
 
 ```json
 {
-  compilerOptions: {
+  "compilerOptions": {
     "allowSyntheticDefaultImports": true,
     "plugins": [{ "name": "ts-vue-plugin" }]
   }
