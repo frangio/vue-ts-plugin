@@ -23,7 +23,7 @@ even support the `template` or `style` tags.
 
 ## Instructions
 
-1. `$ npm install ts-vue-plugin`
+1. `$ npm install vue-ts-plugin`
 2. Add plugin to tsconfig.
 
 ```json
