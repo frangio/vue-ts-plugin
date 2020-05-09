@@ -1,5 +1,5 @@
 import * as ts_module from 'typescript/lib/tsserverlibrary';
-import { parseComponent } from 'vue-template-compiler';
+import { parse as sfcParse } from '@vue/compiler-sfc';
 import path = require('path');
 
 function isVue(filename: string): boolean {
@@ -11,11 +11,11 @@ function isVueProject(path: string) {
 }
 
 function parse(text: string) {
-  const output = parseComponent(text, { pad: "space" });
-  return output && output.script && output.script.content || 'export default {}';
+  const output = sfcParse(text, { pad: "space" });
+  return output.descriptor.script?.content ?? 'export default {}';
 }
 
-function init({ typescript: ts } : {typescript: typeof ts_module}) {
+function init({ typescript: ts } : { typescript: typeof ts_module }) {
   return { create, getExternalFiles };
 
   function create(info: ts.server.PluginCreateInfo) {
@@ -84,7 +84,7 @@ function init({ typescript: ts } : {typescript: typeof ts_module}) {
       return sourceFile;
     }
 
-    function updateLanguageServiceSourceFile(sourceFile: ts.SourceFile, scriptSnapshot: ts.IScriptSnapshot, version: string, textChangeRange: ts.TextChangeRange, aggressiveChecks?: boolean, cheat?: string): ts.SourceFile {
+    function updateLanguageServiceSourceFile(sourceFile: ts.SourceFile, scriptSnapshot: ts.IScriptSnapshot, version: string, textChangeRange?: ts.TextChangeRange, aggressiveChecks?: boolean, cheat?: string): ts.SourceFile {
       if (interested(sourceFile.fileName)) {
         const wrapped = scriptSnapshot;
         scriptSnapshot = {
