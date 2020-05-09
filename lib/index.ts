@@ -78,9 +78,6 @@ function init({ typescript: ts } : { typescript: typeof ts_module }) {
         };
       }
       var sourceFile = clssf(fileName, scriptSnapshot, scriptTarget, version, setNodeParents, scriptKind);
-      if (interested(fileName)) {
-        modifyVueSource(sourceFile);
-      }
       return sourceFile;
     }
 
@@ -94,9 +91,6 @@ function init({ typescript: ts } : { typescript: typeof ts_module }) {
         };
       }
       var sourceFile = ulssf(sourceFile, scriptSnapshot, version, textChangeRange, aggressiveChecks);
-      if (interested(sourceFile.fileName)) {
-        modifyVueSource(sourceFile);
-      }
       return sourceFile;
     }
     ts.createLanguageServiceSourceFile = createLanguageServiceSourceFile;
@@ -122,30 +116,6 @@ function init({ typescript: ts } : { typescript: typeof ts_module }) {
       }
     }
     return undefined;
-  }
-
-  function modifyVueSource(sourceFile: ts.SourceFile): void {
-    // 1. add `import Vue from './vue'
-    // 2. find the export default and wrap it in `new Vue(...)` if it exists and is an object literal
-    //logger.info(sourceFile.getStart() + "-" + sourceFile.getEnd());
-    const statements: ts_module.Statement[] = sourceFile.statements as any;
-    const exportDefaultObject = find(statements, st => st.kind === ts.SyntaxKind.ExportAssignment &&
-                                     (st as ts.ExportAssignment).expression.kind === ts.SyntaxKind.ObjectLiteralExpression);
-    var b = <T extends ts.Node>(n: T) => ts.setTextRange(n, { pos: 0, end: 0 });
-    if (exportDefaultObject) {
-      //logger.info(exportDefaultObject.toString());
-      const vueImport = b(ts.createImportDeclaration(undefined,
-                                                     undefined,
-      b(ts.createImportClause(b(ts.createIdentifier("Vue")), undefined)),
-      b(ts.createLiteral("vue"))));
-      statements.unshift(vueImport);
-      const obj = (exportDefaultObject as ts.ExportAssignment).expression as ts.ObjectLiteralExpression;
-      (exportDefaultObject as ts.ExportAssignment).expression = ts.setTextRange(ts.createNew(ts.setTextRange(ts.createIdentifier("Vue"), { pos: obj.pos, end: obj.pos + 1 }),
-                                                                                             undefined,
-      [obj]),
-      obj);
-      ts.setTextRange(((exportDefaultObject as ts.ExportAssignment).expression as ts.NewExpression).arguments!, obj);
-    }
   }
 
   function getExternalFiles(project: ts_module.server.ConfiguredProject) {
