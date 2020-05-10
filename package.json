@@ -1,20 +1,20 @@
 {
   "name": "vue-ts-plugin",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "TypeScript Language Service Plugin for Vue",
-  "main": "bin/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "prepare": "tsc"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/sandersn/vue-ts-plugin.git"
-  },
+  "repository": "github:frangio/vue-ts-plugin",
   "keywords": [
     "typescript",
     "vue"
   ],
-  "author": "Nathan Shively-Sanders",
+  "contributors": [
+    "Nathan Shively-Sanders",
+    "Francisco Giordano <fg@frang.io>"
+  ],
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/sandersn/vue-ts-plugin/issues"
