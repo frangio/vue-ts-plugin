@@ -1,5 +1,5 @@
 {
-  "name": "vue-ts-plugin",
+  "name": "@frangio/vue-ts-plugin",
   "version": "0.2.0",
   "description": "TypeScript Language Service Plugin for Vue",
   "main": "dist/index.js",
